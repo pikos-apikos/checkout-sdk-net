@@ -2,6 +2,7 @@ using System;
 using Checkout.Common;
 using Checkout.Payments;
 using Checkout.Tests.Mocks;
+using Checkout.Tokens;
 
 namespace Checkout.Tests
 {
@@ -20,6 +21,16 @@ namespace Checkout.Tests
                 Reference = Guid.NewGuid().ToString()
             };
         }
+
+        public static CardTokenRequest CreateCardTokenRequest()
+        {
+            return new CardTokenRequest(TestCardSource.Visa.Number, TestCardSource.Visa.ExpiryMonth,
+                TestCardSource.Visa.ExpiryYear)
+            {
+                Cvv = TestCardSource.Visa.Cvv
+            };
+        }
+
         public static string GenerateRandomEmail()
         {
             return Guid.NewGuid().ToString("n") + "@checkout-sdk-net.com";

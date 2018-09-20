@@ -1,0 +1,194 @@
+﻿@{
+    ViewData["Title"] = "Payment Page";
+}
+
+
+
+
+@*<body>
+    <!-- add frames script -->
+    <script src="https://cdn.checkout.com/js/frames.js"></script>
+    <form id="payment-form" method="POST" action="Payment/Pay">
+        <div class="frames-container">
+            <input type="number" min="0" max="99999" name="amount" required="true"/>
+        </div>
+        <!-- add submit button -->
+        <button id="pay-now-button" type="submit" disabled>Pay now</button>
+    </form>
+
+    <script>
+        var paymentForm = document.getElementById('payment-form');
+        var payNowButton = document.getElementById('pay-now-button');
+
+        Frames.init({
+            publicKey: 'pk_test_6ff46046-30af-41d9-bf58-929022d2cd14',
+            containerSelector: '.frames-container',
+            cardValidationChanged: function() {
+                // if all fields contain valid information, the Pay now
+                // button will be enabled and the form can be submitted
+                payNowButton.disabled = !Frames.isCardValid();
+            },
+            cardSubmitted: function() {
+                payNowButton.disabled = true;
+                // display loader
+            },
+            cardTokenised: function(event) {
+                var cardToken = event.data.cardToken;
+                Frames.addCardToken(paymentForm, cardToken);
+                paymentForm.submit();
+            },
+            cardTokenisationFailed: function(event) {
+                // catch the error
+            }
+        });
+        paymentForm.addEventListener('submit', function(event) {
+            event.preventDefault();
+            Frames.submitCard();
+        });
+    </script>
+    </body>*@
+
+
+
+
+
+
+
+@{
+    ViewData["Title"] = "Payment Page";
+}
+
+@model CheckoutSdk.SampleApp.Models.PaymentModel
+
+<body>
+
+    <script src="https://cdn.checkout.com/js/frames.js"></script>
+
+    @using (Html.BeginForm("RequestPayment", "Payment", FormMethod.Post,
+            new { @id = "payment-form" }))
+    {
+        <div class="frames-container">
+            @Html.LabelFor(p => p.Amount)
+            @Html.TextBoxFor(p => p.Amount)
+
+            @Html.LabelFor(p => p.Currency)
+            @Html.ListBoxFor(p => p.Currency, ViewData["Currency"] as IEnumerable<SelectListItem>)
+            @Html.HiddenFor(p => p.CardToken);
+        </div>
+        <button id="pay-now-button" type="submit" disabled>Pay</button>
+    }
+    <script>
+        var paymentForm = document.getElementById('payment-form');
+        var payNowButton = document.getElementById('pay-now-button');
+
+        Frames.init({
+            publicKey: 'pk_test_db7d3dcb-a5fe-4f13-88df-4683876eb241',
+            containerSelector: '.frames-container',
+            debugMode: true,
+            cardValidationChanged: function () {
+                payNowButton.disabled = !Frames.isCardValid();
+            },
+            cardSubmitted: function () {
+                //payNowButton.disabled = true;
+            },
+            cardTokenised: function (event) {
+                var cardToken = event.data.cardToken;
+                $('#CardToken').val(cardToken);
+                Frames.addCardToken(paymentForm, cardToken);
+                paymentForm.submit();
+            },
+            cardTokenisationFailed: function (event) {
+            }
+        });
+        paymentForm.addEventListener('submit', function (event) {
+            event.preventDefault();
+            Frames.submitCard();
+        });
+    </script>
+</body>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+@*@model CheckoutSdk.SampleApp.Models.PaymentModel*@
+
+@*<form class="payment-form" method="POST" action="https://merchant.com/successUrl">
+        <script>
+            window.CKOConfig = {
+                publicKey: 'pk_test_6ff46046-30af-41d9-bf58-929022d2cd14',
+                customerEmail: 'user@email.com',
+                value: 100,
+                currency: 'GBP',
+                paymentMode: 'cards',
+                cardFormMode: 'cardTokenisation',
+                cardTokenised: function(event) {
+                    console.log(event.data.cardToken);
+                }
+            };
+        </script>
+        <script async src="https://cdn.checkout.com/sandbox/js/checkout.js"></script>
+    </form>*@
+
+
+@*<body>
+
+        <script src="https://cdn.checkout.com/js/frames.js"></script>
+
+        @using (Html.BeginForm("Pay", "Payment", FormMethod.Post,
+                    new { id = "payment-form" }))
+        {
+            <div class="frames-container">
+                @Html.LabelFor(p => p.Amount)
+                @Html.TextBoxFor(p => p.Amount)
+
+                @Html.LabelFor(p => p.Currency)
+                @Html.ListBoxFor(p => p.Currency, ViewData["Currency"] as IEnumerable<SelectListItem>)
+            </div>
+            <button id="pay-now-button" type="submit" disabled>Pay</button>
+        }
+        <script>
+            var paymentForm = document.getElementById('payment-form');
+            var payNowButton = document.getElementById('pay-now-button');
+
+            Frames.init({
+                publicKey: 'pk_test_6ff46046-30af-41d9-bf58-929022d2cd14',
+                containerSelector: '.frames-container',
+                cardValidationChanged: function () {
+                    payNowButton.disabled = !Frames.isCardValid();
+                },
+                cardSubmitted: function () {
+                    payNowButton.disabled = true;
+                },
+                cardTokenised: function (event) {
+                    var cardToken = event.data.cardToken;
+                    Frames.addCardToken(paymentForm, cardToken);
+                    paymentForm.submit();
+                },
+                cardTokenisationFailed: function (event) {
+                }
+            });
+            paymentForm.addEventListener('submit', function (event) {
+                event.preventDefault();
+                Frames.submitCard();
+            });
+        </script>
+    </body>*@
