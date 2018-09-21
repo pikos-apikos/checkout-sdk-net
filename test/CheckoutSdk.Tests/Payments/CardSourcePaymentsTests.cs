@@ -21,37 +21,38 @@ namespace Checkout.Tests.Payments
         }
 
         [Fact]
-        public async Task RequestNonThreeDsCardPayment()
+        public async Task CanRequestNonThreeDsCardPayment()
         {
             PaymentRequest<CardSource> paymentRequest = TestHelper.CreateCardPaymentRequest();
             paymentRequest.ThreeDs = false;
 
-            PaymentResponse apiResponse = await _api.Payments.RequestAsync(paymentRequest);
+            PaymentResponse paymentResponse = await _api.Payments.RequestAsync(paymentRequest);
             
-            apiResponse.Payment.ShouldNotBeNull();
-            apiResponse.Payment.Approved.ShouldBeTrue();
-            apiResponse.Payment.Id.ShouldNotBeNullOrEmpty();
-            apiResponse.Payment.ActionId.ShouldNotBeNullOrEmpty();
-            apiResponse.Payment.Amount.ShouldBe(paymentRequest.Amount.Value);
-            apiResponse.Payment.Currency.ShouldBe(paymentRequest.Currency);
-            apiResponse.Payment.Reference.ShouldBe(paymentRequest.Reference);
-            apiResponse.Payment.Customer.ShouldNotBeNull();
-            apiResponse.Payment.Customer.Id.ShouldNotBeNullOrEmpty();
-            apiResponse.Payment.Customer.Email.ShouldNotBeNullOrEmpty();
-            apiResponse.Payment.CanCapture().ShouldBeTrue();
-            apiResponse.Payment.CanVoid().ShouldBeTrue();
+            paymentResponse.Payment.ShouldNotBeNull();
+            paymentResponse.Payment.Approved.ShouldBeTrue();
+            paymentResponse.Payment.Id.ShouldNotBeNullOrEmpty();
+            paymentResponse.Payment.ActionId.ShouldNotBeNullOrEmpty();
+            paymentResponse.Payment.Amount.ShouldBe(paymentRequest.Amount.Value);
+            paymentResponse.Payment.Currency.ShouldBe(paymentRequest.Currency);
+            paymentResponse.Payment.Reference.ShouldBe(paymentRequest.Reference);
+            paymentResponse.Payment.Customer.ShouldNotBeNull();
+            paymentResponse.Payment.Customer.Id.ShouldNotBeNullOrEmpty();
+            paymentResponse.Payment.Customer.Email.ShouldNotBeNullOrEmpty();
+            paymentResponse.Payment.CanCapture().ShouldBeTrue();
+            paymentResponse.Payment.CanVoid().ShouldBeTrue();
+            paymentResponse.Payment.Source.AsCardSource().ShouldNotBeNull();
         }
 
         [Fact]
-        public async Task RequestThreeDsCardPayment()
+        public async Task CanRequestThreeDsCardPayment()
         {
             PaymentRequest<CardSource> paymentRequest = TestHelper.CreateCardPaymentRequest();
             paymentRequest.ThreeDs = true;
 
-            PaymentResponse apiResponse = await _api.Payments.RequestAsync(paymentRequest);
+            PaymentResponse paymentResponse = await _api.Payments.RequestAsync(paymentRequest);
 
-            apiResponse.IsPending.ShouldBe(true);
-            var pending = apiResponse.Pending;
+            paymentResponse.IsPending.ShouldBe(true);
+            var pending = paymentResponse.Pending;
 
             pending.ShouldNotBeNull();
 
@@ -62,13 +63,13 @@ namespace Checkout.Tests.Payments
             pending.Customer.Email.ShouldBe(paymentRequest.Customer.Email);
             pending.ThreeDs.ShouldNotBeNull();
             pending.ThreeDs.Downgraded.ShouldBe(false);
-            //pending.ThreeDs.Enrolled.ShouldNotBeNullOrEmpty(); //todo uncomment after 2018-09-20
+            pending.ThreeDs.Enrolled.ShouldNotBeNullOrEmpty();
             pending.RequiresRedirect().ShouldBe(true);
             pending.GetRedirectLink().ShouldNotBeNull();
         }
 
         [Fact]
-        public async Task ItCanCapturePayment()
+        public async Task CanCapturePayment()
         {
             // Auth
             var paymentRequest = TestHelper.CreateCardPaymentRequest();
@@ -88,7 +89,7 @@ namespace Checkout.Tests.Payments
         }
 
         [Fact]
-        public async Task ItCanVoidPayment()
+        public async Task CanVoidPayment()
         {
             // Auth
             var paymentRequest = TestHelper.CreateCardPaymentRequest();
@@ -108,7 +109,7 @@ namespace Checkout.Tests.Payments
         }
 
         [Fact]
-        public async Task ItCanRefundPayment()
+        public async Task CanRefundPayment()
         {
             // Auth
             var paymentRequest = TestHelper.CreateCardPaymentRequest();
@@ -132,7 +133,7 @@ namespace Checkout.Tests.Payments
         }
 
         [Fact]
-        public async Task ItCanGetNonThreeDsPayment()
+        public async Task CanGetNonThreeDsPayment()
         {
             PaymentRequest<CardSource> paymentRequest = TestHelper.CreateCardPaymentRequest();
             PaymentResponse paymentResponse = await _api.Payments.RequestAsync(paymentRequest);
@@ -158,7 +159,7 @@ namespace Checkout.Tests.Payments
         }
 
         [Fact]
-        public async Task ItCanGetThreeDsPaymentBeforeAuth()
+        public async Task CanGetThreeDsPaymentBeforeAuth()
         {
             PaymentRequest<CardSource> paymentRequest = TestHelper.CreateCardPaymentRequest();
             paymentRequest.ThreeDs = true;
@@ -180,7 +181,7 @@ namespace Checkout.Tests.Payments
             paymentDetails.RequestedOn.ShouldBeGreaterThan(DateTime.MinValue);
             paymentDetails.ThreeDs.ShouldNotBeNull();
             paymentDetails.ThreeDs.Downgraded.ShouldBe(false);
-            //paymentDetails.ThreeDs.Enrolled.ShouldNotBeNullOrEmpty(); //todo uncomment after 2018-09-20
+            paymentDetails.ThreeDs.Enrolled.ShouldNotBeNullOrEmpty();
             paymentDetails.RequiresRedirect().ShouldBe(true);
             paymentDetails.GetRedirectLink().ShouldNotBeNull();
             paymentDetails.Links.ShouldNotBeNull();
@@ -190,7 +191,7 @@ namespace Checkout.Tests.Payments
         }
 
         [Fact]
-        public async Task ItCanGetPaymentDestinations()
+        public async Task CanGetPaymentDestinations()
         {
             PaymentRequest<CardSource> paymentRequest = TestHelper.CreateCardPaymentRequest();
             var destination = new PaymentDestination("test", 1);
@@ -206,7 +207,7 @@ namespace Checkout.Tests.Payments
         }
 
         [Fact]
-        public async Task ItCanGetPaymentMetadata()
+        public async Task CanGetPaymentMetadata()
         {
             PaymentRequest<CardSource> paymentRequest = TestHelper.CreateCardPaymentRequest();
             var metadata = new KeyValuePair<string, object>("test", "1234");
@@ -222,7 +223,7 @@ namespace Checkout.Tests.Payments
         }
 
         [Fact]
-        public async Task ItCanGetPaymentIp()
+        public async Task CanGetPaymentIp()
         {
             PaymentRequest<CardSource> paymentRequest = TestHelper.CreateCardPaymentRequest();
             paymentRequest.PaymentIp = "10.1.2.3";
@@ -234,7 +235,7 @@ namespace Checkout.Tests.Payments
         }
 
         [Fact]
-        public async Task ItCanGetPaymentRecipient()
+        public async Task CanGetPaymentRecipient()
         {
             PaymentRequest<CardSource> paymentRequest = TestHelper.CreateCardPaymentRequest();
             paymentRequest.Recipient =
@@ -251,7 +252,7 @@ namespace Checkout.Tests.Payments
         }
 
         [Fact]
-        public async Task ItCanGetPaymentShipping()
+        public async Task CanGetPaymentShipping()
         {
             PaymentRequest<CardSource> paymentRequest = TestHelper.CreateCardPaymentRequest();
             paymentRequest.Shipping = new Shipping()
@@ -276,7 +277,7 @@ namespace Checkout.Tests.Payments
         }
 
         [Fact]
-        public async Task ItCanGetPaymentDescription()
+        public async Task CanGetPaymentDescription()
         {
             PaymentRequest<CardSource> paymentRequest = TestHelper.CreateCardPaymentRequest();
             paymentRequest.Description = "Too descriptive";
@@ -288,7 +289,7 @@ namespace Checkout.Tests.Payments
         }
 
         [Fact]
-        public async Task ItCanGetPaymentAction()
+        public async Task CanGetPaymentAction()
         {
             PaymentRequest<CardSource> paymentRequest = TestHelper.CreateCardPaymentRequest();
             PaymentResponse paymentResponse = await _api.Payments.RequestAsync(paymentRequest);
@@ -311,7 +312,7 @@ namespace Checkout.Tests.Payments
         }
 
         [Fact]
-        public async Task ItCanGetMultiplePaymentActions()
+        public async Task CanGetMultiplePaymentActions()
         {
             PaymentRequest<CardSource> paymentRequest = TestHelper.CreateCardPaymentRequest();
             PaymentResponse paymentResponse = await _api.Payments.RequestAsync(paymentRequest);
@@ -337,7 +338,7 @@ namespace Checkout.Tests.Payments
         }
 
         [Fact]
-        public async Task ItCanGetPaymentActionMetadata()
+        public async Task CanGetPaymentActionMetadata()
         {
             PaymentRequest<CardSource> paymentRequest = TestHelper.CreateCardPaymentRequest();
             var metadata = new KeyValuePair<string, object>("test", "1234");

@@ -17,7 +17,7 @@ namespace Checkout.Tests
             )
             {
                 Capture = false,
-                Customer = new Customer() { Email = TestHelper.GenerateRandomEmail()},
+                Customer = new Customer() { Email = TestHelper.GenerateRandomEmail() },
                 Reference = Guid.NewGuid().ToString()
             };
         }
@@ -34,6 +34,13 @@ namespace Checkout.Tests
         public static string GenerateRandomEmail()
         {
             return Guid.NewGuid().ToString("n") + "@checkout-sdk-net.com";
+        }
+
+        public static PaymentRequest<TokenSource> CreateTokenPaymentRequest(string token)
+        {
+            return new PaymentRequest<TokenSource>(new TokenSource(token),
+                    Currency.GBP,
+                    100);
         }
     }
 }
