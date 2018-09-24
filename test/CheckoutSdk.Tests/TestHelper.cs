@@ -1,7 +1,6 @@
 using System;
 using Checkout.Common;
 using Checkout.Payments;
-using Checkout.Tests.Mocks;
 using Checkout.Tokens;
 
 namespace Checkout.Tests

@@ -4,13 +4,15 @@ namespace CheckoutSdk.SampleApp.Models
 {
     public class PaymentModel
     {
+        public const string CurrenciesViewData = "Currencies";
+        public static string PublicKeyViewData = "PublicKey";
+
         [Required]
         public int? Amount { get; set; }
         [Required]
         public string Currency { get; set; }
-        [Required]
+
+        public bool DoThreeDs { get; set; }
         public string CardToken { get; set; }
-        [Required]
-        public bool Do3ds { get; set; }
     }
 }

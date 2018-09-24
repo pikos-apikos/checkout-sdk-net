@@ -1,10 +1,23 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Text;
+using Checkout.Payments;
+using Shouldly;
+using Xunit;
 
 namespace Checkout.Tests.Payments
 {
-    class TokenSourceTests
+    public class TokenSourceTests
     {
+        [Theory]
+        [InlineData(null)]
+        [InlineData("")]
+        [InlineData(" ")]
+        public void GivenTokenInvalidShouldThrowArgumentException(string token)
+        {
+            var validationException = Should.Throw<ArgumentException>(
+                () => { new TokenSource(token); }
+            );
+
+            validationException.ShouldNotBeNull();
+        }
     }
 }

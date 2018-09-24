@@ -6,10 +6,17 @@
 <h1 class="text-danger">Error.</h1>
 <h2 class="text-danger">An error occurred while processing your request.</h2>
 
-@if (Model.ShowRequestId)
+@if (Model?.ShowRequestId != null)
 {
     <p>
         <strong>Request ID:</strong> <code>@Model.RequestId</code>
+    </p>
+}
+
+@if (Model?.ShowMessage != null)
+{
+    <p>
+        <strong>Message:</strong> <code>@Model.Message</code>
     </p>
 }
 
