@@ -14,12 +14,12 @@ namespace CheckoutSdk.SampleApp.Controllers
     public class PaymentController : Controller
     {
         private readonly ICheckoutApi _checkoutApi;
-        private readonly IUrlBuilder _urlBuilder;
+        private readonly IControllerUrlBuilder _controllerUrlBuilder;
 
-        public PaymentController(ICheckoutApi checkoutApi, IUrlBuilder urlBuilder)
+        public PaymentController(ICheckoutApi checkoutApi, IControllerUrlBuilder controllerUrlBuilder)
         {
             _checkoutApi = checkoutApi;
-            _urlBuilder = urlBuilder;
+            _controllerUrlBuilder = controllerUrlBuilder;
         }
 
         [HttpGet]
@@ -85,7 +85,7 @@ namespace CheckoutSdk.SampleApp.Controllers
 
         private string BuildUrl(string actionName)
         {
-            return _urlBuilder.Build(this, actionName);
+            return _controllerUrlBuilder.Build(this, actionName);
         }
 
         public async Task<IActionResult> ThreeDsSuccess([FromQuery(Name = "cko-session-id")] string ckoSessionId)

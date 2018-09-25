@@ -36,7 +36,7 @@ namespace Checkout.Tests.SampleApp
                 p.GetAsync(It.IsAny<string>(), default(CancellationToken)))
                     .ReturnsAsync(() => new GetPaymentDetailsResponse());
 
-            var urlBuilder = new Mock<IUrlBuilder>();
+            var urlBuilder = new Mock<IControllerUrlBuilder>();
             urlBuilder.Setup(b => b.Build(It.IsAny<ControllerBase>(), It.IsAny<string>()))
                 .Returns("test");
             
@@ -160,22 +160,22 @@ namespace Checkout.Tests.SampleApp
         [Fact]
         public async Task CanRenderThreeDsSuccessView()
         {
+            _checkoutApi.Setup(a => a.Payments).Returns(_paymentsClient.Object);
             var result = await _controller.ThreeDsSuccess("test");
 
             var viewResult = result.ShouldBeAssignableTo<ViewResult>();
-            viewResult.ViewData.ModelState.IsValid.ShouldBeTrue();
-            viewResult.ViewName.ShouldBe(nameof(PaymentController.ThreeDsSuccess));
+            viewResult.ViewName.ShouldBeNull();
             viewResult.Model.ShouldBeAssignableTo<GetPaymentDetailsResponse>();
         }
 
         [Fact]
         public async Task CanRenderThreeDsFailureView()
         {
+            _checkoutApi.Setup(a => a.Payments).Returns(_paymentsClient.Object);
             var result = await _controller.ThreeDsFailure("test");
 
             var viewResult = result.ShouldBeAssignableTo<ViewResult>();
-            viewResult.ViewData.ModelState.IsValid.ShouldBeTrue();
-            viewResult.ViewName.ShouldBe(nameof(PaymentController.ThreeDsFailure));
+            viewResult.ViewName.ShouldBeNull();
             viewResult.Model.ShouldBeAssignableTo<GetPaymentDetailsResponse>();
         }
     }

@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.Extensions.Configuration;
 
 namespace CheckoutSdk.SampleApp
 {
@@ -12,6 +13,11 @@ namespace CheckoutSdk.SampleApp
 
         public static IWebHost BuildWebHost(string[] args) =>
             WebHost.CreateDefaultBuilder(args)
+                .ConfigureAppConfiguration((hostingContext, config) =>
+                {
+                    config.AddJsonFile("appsettings.json");
+                    config.AddJsonFile("appsettings.local.json", true);
+                })
                 .UseStartup<Startup>()
                 .Build();
     }

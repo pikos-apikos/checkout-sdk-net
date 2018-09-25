@@ -4,12 +4,12 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace CheckoutSdk.SampleApp.Controllers
 {
-    public interface IUrlBuilder
+    public interface IControllerUrlBuilder
     {
         string Build(ControllerBase controller, string actionName);
     }
 
-    public class ControllerUrlBuilder : IUrlBuilder
+    public class ControllerControllerUrlBuilder : IControllerUrlBuilder
     {
         public string Build(ControllerBase controller, string actionName)
         {
